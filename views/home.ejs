@@ -1,0 +1,40 @@
+<!-- <html>
+  <head>
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="content">
+      <form action="/csv/upload" enctype="multipart/form-data" method="POST">
+        <input
+          type="file"
+          name="csvfile"
+          accept=".csv, text/csv"
+          placeholder="Upload CSV File"
+        />
+        <input type="submit" value="Upload" />
+      </form>
+    </div>
+  </body>
+</html> -->
+<h3>MY CSV Home Page</h3>
+
+<form action="/users/upload" enctype="multipart/form-data" method="POST">
+  <input
+    type="file"
+    name="csvfile"
+    accept=".csv, text/csv"
+    placeholder="Upload CSV File"
+  />
+  <input type="submit" value="Upload" />
+</form>
+<br />
+<h1>My All CSV Files (uploaded in db )</h1>
+<ul>
+  <% for (post of posts){%>
+  <li>
+    <a href="users/view/<%=post.id%>"><%= post.name %></a>
+    <a href="users/destroy/<%=post.id%>">delete</a>
+  </li>
+  <%}%>
+</ul>
