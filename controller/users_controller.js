@@ -3,6 +3,7 @@ const path = require("path");
 const Post = require("../models/csv");
 const csv = require("csv-parser");
 const fs = require("fs");
+const converted = require("csvtojson");
 
 //db upload
 module.exports.uploadFile = async function (req, res) {
@@ -21,18 +22,28 @@ module.exports.destroy = function (req, res) {
     return res.render("sus");
   });
 };
-module.exports.view = function (req, res) {
-  let querry = DB.findById(req.params.id);
-  // let location = path.join(__dirname, "uploads/", querry.path);
-  // console.log(location);
-  // fs.createReadStream("location")
-  //   .pipe(csv())
-  //   .on("data", (row) => {
-  //     console.log(row);
-  //   })
-  //   .on("end", () => {
-  //     console.log("CSV file successfully processed");
-  //   });
+module.exports.view = async function (req, res) {
+  // console.log(path.join(__dirname, "./", "routes/uploads/"));
+  try {
+    let file = await DB.findById(req.params.id);
+    console.log(file, "file");
+    console.log(path.join(__dirname, "../", "routes/", "uploads/", file.path));
+    let filePath = path.join(
+      __dirname,
+      "../",
+      "routes/",
+      "uploads/",
+      file.path
+    );
 
-  return res.render("suceess");
+    const filedata = await converted().fromFile(filePath);
+    return res.render("display", {
+      title: file.name,
+      fileFormat: filedata,
+    });
+  } catch (err) {
+    //if error
+    console.log(err);
+    return res.redirect("back");
+  }
 };
